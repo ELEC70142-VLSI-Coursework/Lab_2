@@ -348,4 +348,4 @@ The final task is to confirm that the layout you created implements the circuit 
 * Enter the location of LVS rule file as: **_/usr/local/cadence/kits/tsmc/65n_LP/Calibre/lvs/calibre.lvs_** and press **_LOAD_**.
 * Run LVS and there should be no error.
 
-Since the layout matches that of the schematic, which was imported from Lab 1 and was previously verified to be functionally correct through simulation, we are confident that this LFSR4 layout works as intended.
+Since the layout matches   the schematic, which was imported from Lab 1 and was previously verified to be functionally correct through simulation, we are confident that this LFSR4 layout works as intended.
