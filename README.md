@@ -5,7 +5,7 @@
 
 ### Lab 2 - Understanding and Editing Layout
 
-##### *Peter Cheung, v1.0 - 9 October 2025*
+##### *Peter Cheung, v1.1 - 9 October 2025*
 
 ---
 ### Objectives
