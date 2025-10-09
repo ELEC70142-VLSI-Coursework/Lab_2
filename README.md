@@ -14,15 +14,15 @@ By the end of this laboratory session, you should be able to do the following.
 * Understand the different mask layers that make up the layout of an inverter.
 * Manually extract the circuit schematic of a 12-transistors logic gate from its layout.
 * Import a Verilog netlist into Virtuoso as a schematic.
-* Use Cadence's Virtuoso tool package to perform floorplanning and placement.
-* Use Cadence's Virtuoso tool package to perform routing.
-* Use Cadence's Calibre tool package to verify that your layout obeys design rules through DRC.
-* Use Cadence's Calibre tool package to verify that your layout is the same as the schmatic.
+* Use Cadence's Virtuoso tool to perform manual floorplanning and placement.
+* Use Cadence's Virtuoso tool to perform manual routing.
+* Use Cadence's Calibre tool to verify that your layout obeys design rules through DRC.
+* Use Cadence's Calibre tool to verify that your layout is the same as the schematic.
 
 ---
 ### Task 1 - Deep Dive into Inverter Layout (30 minutes)
 ---
-The purpose of this task is for you to understand the different mask layers that make up a simple inverter from the layout.  This helps you to appreciate the fabrication process and the physical aspect of VLSI design.
+The purpose of this task is to understand the different mask layers that make up a simple inverter from the layout.  This helps you to appreciate the fabrication process and the physical aspect of VLSI design.
 
 **_Step 1: Launch Virtuoso_**
 
@@ -32,14 +32,14 @@ Navigate to the same folder that contains Lab 1's design. Launch Virtuoso layout
 ```bash
 cadence&
 ```
-A Virtuoso message window will appear. You are now runnig the Cadence Virtuoso package in the background.
+A Virtuoso message window will appear. You are now running the Cadence Virtuoso package in the background.
 
 **_Step 2: Fetch the inverter standard cell from library_**
 
-Go  to the Virtuoso message window and click **_Tools -> Library Manager ..._**.  
+Go to the Virtuoso message window and click **_Tools -> Library Manager ..._**.  
 <p align="center"> <img src="diagrams/open_LM.jpg" width="1000" height="170"> </p><BR>
 
-Select the TSMC's **_tcbn65lpbwp7t_9lm_** library.
+Select TSMC's **_tcbn65lpbwp7t_9lm_** library.
 
 >**TSMC process library naming convention:** 
 > * **_tc_** - technology characterisation
@@ -60,11 +60,11 @@ From the list of standard cells in this technology library will appear. Select *
 > * **_D0_** - lowest output current capability (D6 is highest)
 > * **_BWP7T_** - bulk CMOS (bw), low threshold voltage (p) and 7-track high cell library (7t)
 
-Double click the **_layout_** view on right most pane to view the layout of this inverter standard cell.  (See diagram above.) You can also use the shortcut command **_"f"_** to fit the entire layout in the window.
+Double click the **_layout_** view on the right most pane to view the layout of this inverter standard cell.  (See diagram above.) You can also use the shortcut command **_"f"_** to fit the entire layout in the window.
 
-Examine the different mask layers that are used to fabricate this inverter by doing the following:
-1. The layout cellview window shows the inverter standard cell layout. On the left are ALL the mask layers associated with this fabrication process. There are more than 50 masks include!  Examine them briefly and see if you can spot some of them that you can recognise.
-2. Click on **_Used_** tick box at the top to show ONLY the masks layers that are used in the design of this standard cell.  (See diagram below.)
+Examine the different mask layers that make up this inverter by doing the following:
+1. The layout cellview window shows the inverter standard cell layout. On the left are ALL the mask layers associated with this fabrication process. There are more than 50 masks included!  Examine them briefly and see if you can spot some of them that you can recognise.
+2. Click on **_Used_** tick box at the top to show ONLY the masks layers that are used in this designdf.  (See diagram below.)
 3. Click on **_V_** (red circle) to turn OFF all layers.
 4. From top to bottom, turn on one layer at a time and observe how the inverter cell is "constructed".
    
@@ -87,7 +87,7 @@ Discuss with your partner what you understand from this exercise.
 
 ### Task 2 - Extract Circuit from Layout (40 minutes)
 
-The goal of this task is for you to learn how to intepret a layout and re-create the transistor schematic of a 12-transistors standard cell.
+The goal of this task is for you to learn how to interpret a layout and re-create the transistor schematic of a 12-transistors standard cell.
 
 **_Step 1: Load the XOR gate standard cell_**
 
@@ -95,31 +95,31 @@ If the Library Manager window is not open, open it from the Virtuoso message win
 
 In the Library Manager window, select the XOR gate standard cell **_CKXOR2D0BWP7T_**.
 
-> CKXOR2 - clock optimized 2-input XOR gate
+> CKXOR2 means clock optimized 2-input XOR gate
 
 Open the layout of this standard cell by double-clicking on **_layout_** view.  Use the **_"f"_** command to fit the layout within the window.
 
 **_Step 2: Extract the circuit schematic from the layout_**
 
-You and your lab partner are now required to extract from this layout all the transistors. Then connect them together to produce a transistor level schematic diagram.  You should label all transistors in the top row from left to right with **_odd_** designations (i.e. T1 to T11), and the bottom row with **_even_** designations (T2 to T12).  Put the schematic circuit diagram in your logbook.
+You and your lab partner are now required to extract from this layout all the transistors. Then connect them together to produce a transistor level schematic diagram.  You should label all top row transistors from left to right with **_odd_** designations (i.e. T1 to T11), and the bottom row transistors with **_even_** designations (T2 to T12).  Put the schematic circuit diagram in your logbook and record what you have learned.
 
 **_Step 3: Sizing the transistors_**
 
-* With the  **_"k"_** command, measure the **sizes** (i.e. widths) of all transistors and annotate them on your schematic.
+* With the  **_"k"_** command, measure the **sizes** (i.e. widths and length) of all transistors and annotate them on your schematic.
 * Check with another group near you whether you have the same circuit as they do.  
-* Satisfy yourself that this cicuit fulfils the logic function of a 2-input XOR gate.
+* Satisfy yourself that this circuit fulfils the logic function of a 2-input XOR gate.
 
-> You can remove the measurements and rulers with the **_SHIFT-k_** command.
+> You can remove the measurement and ruler annotations with the **_SHIFT-k_** command.
 
 ### Task 3 - Hand Place the standard cells (45 min)
 
-The purpose of this task is for you to learn how to use Virtuoso for **layout editing**.  While you will not be designing layout of a gate from transistor up, you will still need to learn how to wire up synthesize, placed and routed modules and connect them to the pad ring.
+The purpose of this task is for you to learn how to use Virtuoso for **layout editing**.  While you will not be designing layout of a gate from transistor up, you will still need to learn how to wire up synthesized modules and to connect them to the pad ring.
 
-The goal of this task is for you to take the Verilog netlist from Lab 1 and manually place them as a row of cells and connect the cells into the LFSR4 circuit.
+The goal of this task is for you to import the cells used in the LFSR4 Verilog netlist from Lab 1 and manually place them in a row of cells in an optimal order.
 
 **_Step 1: Set up the LAB_2 folder as a new library (i.e. project)_**
 
-Before we start layout editing, we need to create a project (called a **_library_** in Cadence parlance) for this exercise. 
+Before we start layout editing, we need to create a project (called a **_library_** in Cadence's parlance).
 
 Create the project folder by:
 
@@ -129,9 +129,9 @@ Create the project folder by:
 
 <p align="center"> <img src="diagrams/lab2_1.jpg" width="1000" height="300"> </p><BR>
 
->What you have just done was to create a directory called **LAB_2** in your **_pwd_** (present working directory), initialize it for a   design called **LAB_2**, and specify that the technology is **_tsmcN65_**.
+>What you have just done was to create a directory called **LAB_2** in your **_pwd_** (present working directory), initialized it for a  design called **LAB_2**, and specified that the technology is **_tsmcN65_**.
 
-If you use **_ls -l_** unix command in the terminal window to examine what has been created, you will see that LAB_2 folder with Cadence generated files ready to create a new layout in the TSMC 65nm process.
+If you use **_ls -l_** unix command in the terminal window to examine what has been created, you will see that LAB_2 folder with Cadence generated files ready to create a new layout in the TSMC's 65nm process.
 
 Copy from LAB_1/OUTPUTS folder, the synthesized and placed-and-routed netlist for LFSR4 to the LAB_2 folder:
 
@@ -145,23 +145,22 @@ In the Virtuoso message window, use **_file -> import -> verilog_** command to o
 
 <p align="center"> <img src="diagrams/import.jpg" width="800" height="500"> </p><BR>
 
-To successfully important the Verilog netlist from Lab 1, follow the steps below as show in the diagram above:
-1. Use the browser button, select the netlist file **_lfsr4_soc.v_**.
-2. Set **LAB_2** (or whatever name you call this folder) as the target library (project) to be stored.
+To successfully important the Verilog netlist from Lab 1, follow the steps below as annotated in the diagram above:
+1. Locate and select the netlist file **_lfsr4_soc.v_**.
+2. Set **LAB_2** (or similar) as the target library (project) to be stored.
 3. Add into the **reference library** list the technology file we are using. This contains information about the standard cells.
-4. Specify that you can to important this Verilog netlist as both **schematic and functional**.  This allows for Layout vs Schematic verification later.
+4. Specify that you import this Verilog netlist as both **schematic and functional**.  This allows Layout vs Schematic verification later.
 5. Now go to **_"Global Net Options"_** menu at the top to change the dialogue box contents.
-7. Remove the "!" characters in the power net names to "VDD" and "VSS".
-8. Click OK to important the Verilog netlist and generate a schematic diagram.
+6. Delete the "!" characters in the power net names to "VDD" and "VSS".
+7. Click OK to important the Verilog netlist and generate a schematic diagram.
     
-9.  Use the "f" short-cut to fit the entire schematic in the newly opened window.
+8.  Use the **_"f"_** short-cut to fit the entire schematic in the newly opened window.
 
-You should see the schematic circuit for the PnRed LFSR4 module from Lab 1 as below.
+You should see the schematic circuit for the placed-and-routed LFSR4 module from Lab 1 as below.
    
 <p align="center"> <img src="diagrams/schematic.jpg" width="1000" height="250"> </p><BR>
 
->You can zoom in and out of the schematic at the pointer location using scroll wheel of the mouse. 
->You can also pan across the schematic by click and hold the scroll button and drag the mouse.
+>To navigate around the schematic, you can zoom in and out of the schematic at the pointer location using the scroll wheel. You can also pan across the schematic by click and hold the scroll button and drag the mouse.
 
 Zoom into the bottom right component on the schematic as indicated above.  You will see the MSB D-FF of the LFSR *_sreg_reg[4]_*.  All the connections are automatically wired except for VDD and VSS. This is because the Verilog netlist does not include these signals.
 
@@ -170,63 +169,63 @@ Zoom into the bottom right component on the schematic as indicated above.  You w
 **_Step 4: Add VDD and VSS connection to the schematic_**
 
 We now need to tell the schematic about the VDD and VSS connections. 
-* Use the "w" or wire shortcut, and "draw" two horizontal wires from VDD and VSS by right-click at start and end of wire. Use ESC to terminate each wire.
-* Use the "l" or label shortcut, and enter VDD as label, and click on the wire to be labelled. So the same for VSS.
+* Use the **_"w"_** (wire) command, and "draw" two horizontal wires from VDD and VSS by right-click at start and end of wire. Use ESC to terminate each wire.
+* Use the **_"l"_** (label) command, and enter VDD as label. Then click on the wire to be labelled. Do the same for VSS.
 * Repeat this on all components.
   
->A quicker way to do this is to select the two wires and their labels, use "c" shortcut to cut the entire group and click at a new location to paste.  Try this yourself.
->If you make a mistake, you can use the **_"u"_** undo shortcut to undo your previous actions.
+>A quicker way to do this is to select the two wires and their labels, use **_"c"_** to cut the entire group and click at a new location to paste.  Try this yourself.
+>If you make a mistake, you can use the **_"u"_** undo command to undo your previous actions.
 
-Once you have added the VDD and VSS wires to all components, click the **_check and save_** icon (third from the left with a green tick).  You will see one warning.  The warning is because the imported schematic created a cross connection at the output.  You can more the output cross wire down a bit to form a T-junction and not a cross junction. When you **_check and save_** again, the warning will disappear and the schematic is now correct nad ready to be used a reference for LVS verification later.
+Once you have added the VDD and VSS wires to all components, click the **_check and save_** icon (third from the left with a green tick).  You will see one warning.  The warning is because the imported schematic created a cross connection at the output.  You can move the output connection down a bit to form a T-junction and not a cross junction. When you **_check and save_** again, the warning will disappear and the schematic is now correct nad ready to be used as reference for LVS (layout vs schematic) verification later.
 
 >We know the circuit represented by the schematic is a faithful representation of the intended circuit because it was generated from a simulated netlist from Lab 1.
 
 **_Step 4: Preparation for manual layout of standard cells_**
 
-The next step is to create a layout view of the LFSR4 circuit.  
+The next step is to create a layout view of the LFSR4 circuit as companion to the schematic view.  
 1. In the main message window, create a new layout design with: **_File -> New -> Cellview_**.
 2. In the **_"New File"_** window, specify details about this new layout file according to the diagram below.
 3. In the new layout window, import the standard cells in the schematic with: **_Connectivy -> Generate -> All from Source ..._**. (See diagram below.)
 
 <p align="center"> <img src="diagrams/generate_layout.jpg" width="1000" height="300"> </p><BR>
 
-4. A **_"Generate Layout"_** dialogue box will pop up. Select the **_I/O pin_** section at the top of the window as shown in diagram below. This is to tell the layout which layer I/O pin of the standard cells are on.
+4. A **_"Generate Layout"_** dialogue box will pop up. Select the **_I/O pin_** section at the top of the window as shown in diagram below. This is to tell the layout which layer I/O pins of the standard cells are on.
 5. Select **M1** to specify that all I/O pin are on metal 1 layer.
 6. Click the **_"Create Label as"_** radio button and then click **_"Option"_**.
-7. Another window called **_"Set Pin Label"_** dialogue box will pop up.  Select both **_"Same As Pin"_** button.
+7. Another dialogue box called **_"Set Pin Label"_** will pop up.  Select both **_"Same As Pin"_** button.
 8. Click the two **_"OK"_** buttons.
 
 <p align="center"> <img src="diagrams/pin_section.jpg" width="600" height="400"> </p><BR>
 
-After  these steps, you should see a new layout window pop up with a purple box at the top and all 7 standard cell instances inserted on the layout canvas as bounding rectangles.
+After  these steps, you should see a new layout window with a purple box at the top and all 7 standard cell instances inserted on the layout canvas as bounding rectangles.
 
 **_Step 5: Floorplanning_**
 
-The goal of this step is to arrange the cells in a rough floorplan as shown in the diagram below.  The rationale is that the inputs signals are on the left, the outputs are on the right. The cells are placed such that their output pins are close to the input pins to which they are connected.
+The goal of this step is to arrange the cells in a rough floorplan as shown in the diagram below.  The goal is create a floorplan such that their output pins are close to the input pins to which they are connected.
 
 <p align="center"> <img src="diagrams/floorplan.jpg" width="600" height="200"> </p><BR>
 
 Before we can move the standard cells to match this floorplan, we need to do three preliminary steps:
-1. **Arrange the schematic and layout windows** - resize and move the schematic and layout windows side by size. The layout window should be wider. If you now select a cell in one window, it will be highlighted on the other window.  In this way, you can identify which component is which.
-2. **Change the PnR boundary** - Click on the purple bounding box (which will turn yellow) and use the **_"q"_**  command to bring up the **_"Edit PR Boundary Property"_** dialogue box.  Change the bounding box coordinate to (0 0) (0 5) (35, 5) (35, 0).
+1. **Arrange the schematic and layout windows** - resize and move the schematic and layout windows side by size. The layout window should be wider. If you now select a cell in one window, it will be highlighted on the other window and vice versa.  In this way, you can identify the components in layout or schematic view.
+2. **Change the PnR boundary** - Select the purple bounding box (which will turn yellow when selected) and use the **_"q"_** command to bring up the **_"Edit PR Boundary Property"_** dialogue box.  Change the bounding box coordinate to (0 0) (0 5) (35, 5) (35, 0).
 3. **Set snap grid to 5nm** - **_Use Option -> Display_** (or the "e" command) to bring up the **_"Display Option"_** dialogue box and change the X and Y snap spacing to 0.005.
 
 <p align="center"> <img src="diagrams/bb_snap.jpg" width="900" height="200"> </p><BR>
 
 Select one cell at a time and drag and place it inside the PnR area (purple box) according to the floorplan diagram shown earlier. 
 
->Note that you can only move a component horizontally and then vertically in two separate steps, but not diagonally.
+>Note that you can only move a component horizontally and vertically in two separate steps, and not diagonally.
 
-We next expose the actual layout of the cells with the **_"SHFIT-f"_** command.  
+Expose the actual layout of the cells with the **_"SHFIT-f"_** command.  
 The result of this floorplanning step is shown in the diagram below.
 
 <p align="center"> <img src="diagrams/floorplan_layout.jpg" width="1200" height="150"> </p><BR>
 
 **_Step 6: Manual Placement_**
 
-The next step is to place each cell at the final precise location. This action needs to be extrememly precise and require you to use the mouse to enlarge the layout so that all geometric feature is clearly seen.  
+The next step is to place each cell at the **_final precise location_**. This action needs to be extremely precise and require you to use the mouse to zoom into regions of the layout with the scroll wheel so that all geometric features are clearly seen.  
 
-The most useful command here is **"a"**, the align command.  Let us now place the left-most cell (the delay cell) abutting the inverter cell:
+The most useful command here is **"a"**, the align command.  Place the left-most cell (the delay cell) abutting the inverter cell:
 1. Zoom into the top right corner of the left-most cell with the mouse scroll wheel while the cursor is at the location you want to zoom.
 2. Select the left-most cell (delay). **_The cell will be highlighted in a **WHITE** bounding box_**.
 3. Press **"a"** command. The curson now has an alignment icon attached to it. You are now in **_alignment mode_**.
