@@ -5,7 +5,7 @@
 
 ### Lab 2 - Understanding and Editing Layout
 
-##### *Peter Cheung, v1.1 - 9 October 2025*
+##### *Peter Cheung, v1.2 - 9 October 2025*
 
 ---
 ### Objectives
@@ -153,8 +153,8 @@ To successfully important the Verilog netlist from Lab 1, follow the steps below
 5. Now go to **_"Global Net Options"_** menu at the top to change the dialogue box contents.
 6. Delete the "!" characters in the power net names to "VDD" and "VSS".
 7. Click OK to important the Verilog netlist and generate a schematic diagram.
-    
-8.  Use the **_"f"_** short-cut to fit the entire schematic in the newly opened window.
+8. Use **_Tool -> Library Manager_** on the main message window to open the schematic view of the lfsr circuit.
+9.  Use the **_"f"_** short-cut to fit the entire schematic in the newly opened window.
 
 You should see the schematic circuit for the placed-and-routed LFSR4 module from Lab 1 as below.
    
