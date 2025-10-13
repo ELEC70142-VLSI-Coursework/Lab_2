@@ -5,7 +5,7 @@
 
 ### Lab 2 - Understanding and Editing Layout
 
-##### *Peter Cheung, v1.2 - 9 October 2025*
+##### *Peter Cheung, v1.3 - 10 October 2025*
 
 ---
 ### Objectives
@@ -18,6 +18,10 @@ By the end of this laboratory session, you should be able to do the following.
 * Use Cadence's Virtuoso tool to perform manual routing.
 * Use Cadence's Calibre tool to verify that your layout obeys design rules through DRC.
 * Use Cadence's Calibre tool to verify that your layout is the same as the schematic.
+
+>Due to the length of this laboratory experiment, Lab 2 is now divided into Part 1 and Part 2.  
+>Part 1 (Tasks 1 & 2) is about understanding the layout of a VLSI circuit.
+>Part 2 (Tasks 3 to 5) is about using Cadence's Virtuoso layout editor to create and modify a layout.
 
 ---
 ### Task 1 - Deep Dive into Inverter Layout (30 minutes)
