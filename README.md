@@ -19,7 +19,7 @@ By the end of this laboratory session, you should be able to do the following.
 * Use Cadence's Calibre tool to verify that your layout obeys design rules through DRC.
 * Use Cadence's Calibre tool to verify that your layout is the same as the schematic.
 
->Due to the length of this laboratory experiment, Lab 2 is now divided into Part 1 and Part 2.  
+>Due to the length of this laboratory experiment, Lab 2 is now divided into Part 1 and Part 2:  
 >* Part 1 (Tasks 1 & 2) is about understanding the layout of a VLSI circuit. 
 >* Part 2 (Tasks 3 to 5) is about using Cadence's Virtuoso layout editor to create and modify a layout.
 
