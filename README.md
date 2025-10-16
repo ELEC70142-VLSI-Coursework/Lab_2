@@ -351,6 +351,8 @@ The final task is to confirm that the layout you created implements the circuit 
 
 * Use the command: **_Calibre -> nmLVS>** to bring up the LVS dialogue box.
 * Enter the location of LVS rule file as: **_/usr/local/cadence/kits/tsmc/65n_LP/Calibre/lvs/calibre.lvs_** and press **_LOAD_**.
+* Select **_LVS Options → Database → Library → additional SPICE Files_**
+* Add *_“/usr/local/cadence/kits/tsmc/beLibs/65nm/TSMCHOME/digital/Back_End/spice/tcbn65lpbwp7t_141a/tcbn65lpbwp7t_141a.spi”_*.
 * Run LVS and there should be no error.
 
 Since the layout matches   the schematic, which was imported from Lab 1 and was previously verified to be functionally correct through simulation, we are confident that this LFSR4 layout works as intended.
