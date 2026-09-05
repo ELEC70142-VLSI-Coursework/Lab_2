@@ -33,8 +33,11 @@ The purpose of this task is to understand the different mask layers that make up
 
 Log onto the teaching server ee-mill1 or ee-mill2 (depending on your group number), and set up the technology with **_vlsi-tooling/syn tsmc65LP_** as before.
 
-Navigate to the same folder that contains Lab 1's design. Launch Custom Compiler layout editor in the background by typing:
+Make a new folder for Lab 2 and launch Custom Compiler:
 ```bash
+cd ~/Labs
+mkdir Lab_2
+cd Lab_2
 custom &
 ```
 A Custom Compiler window will appear. You are now running the Synopsys Custom Compiler package in the background.
@@ -57,7 +60,7 @@ Select TSMC's **_tcbn65lpbwp7t_9lm_** library.
 
 **_Step 3: Examine mask layers for the inverter_**
 
-From the list of standard cells in this technology library will appear. Select **_CKND1BWP7T_**.  This is one of the cells used in the LFSR4 circuit in Lab 1.
+From the list of standard cells in this technology library will appear. Select **_CKND1BWP7T_**.  This is one of the cells used in the LFSR4 netlist from the physical synthesis flow from Lab 1.
 
 >**TSMC standard cell naming convention:** 
 
@@ -135,7 +138,7 @@ Click **OK**.
 
 <p align="center"> <img src="diagrams/new_library.png" width="466" height="590"> </p><BR>
 
->This creates a directory called `Lab_2` in your current working directory and attaches it to TSMC's 65nm technology library.  
+>This creates a library called `Lab_2` in your current working directory and attaches it to TSMC's 65nm technology library.  
 
 Copy the placed-and-routed netlist for LFSR4 from Lab 1 into this directory:
 
