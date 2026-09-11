@@ -5,7 +5,7 @@
 
 ### Lab 2 - Understanding and Editing Layout
 
-##### *Peter Cheung, v2.0 - 4 September 2026*
+##### *Peter Cheung, v2.1 - 11 September 2026*
 
 ---
 ### Objectives
@@ -16,16 +16,17 @@ By the end of this laboratory session, you should be able to do the following.
 * Import a Verilog netlist into Custom Compiler as a schematic.
 * Use Synopsys's Custom Compiler tool to perform manual floorplanning and placement.
 * Use Synopsys's Custom Compiler tool to perform manual routing.
-* Use Siemens's Calibre tool to verify that your layout obeys design rules through DRC.
-* Use Siemens's Calibre tool to verify that your layout is the same as the schematic.
+* Import a GDSII layout and a CDL netlist into Custom Compiler.
+* Use Siemens's Calibre tool to find and fix design rule violations through DRC.
+* Use Siemens's Calibre tool to verify that a layout is the same as its netlist through LVS.
 
 >Due to the length of this laboratory experiment, Lab 2 is now divided into Part 1 and Part 2:  
 >* Part 1 (Tasks 1 & 2) is about understanding the layout of a VLSI circuit. 
->* Part 2 (Tasks 3 to 5) is about using Synopsys's Custom Compiler layout editor to create and modify a layout.
+>* Part 2 (Tasks 3 to 5) is about using Synopsys's Custom Compiler layout editor to create, modify and repair a layout.
 
 
 ---
-### Task 1 - Deep Dive into Inverter Layout (30 minutes)
+### Task 1 - Deep Dive into Inverter Layout (30 min)
 ---
 The purpose of this task is to understand the different mask layers that make up a simple inverter from the layout.  This helps you to appreciate the fabrication process and the physical aspect of VLSI design.
 
@@ -93,7 +94,7 @@ Discuss with your partner what you understand from this exercise.
 > * M1 - cell input output pin locations on metal 1
 
 
-### Task 2 - Extract Circuit from Layout (40 minutes)
+### Task 2 - Extract Circuit from Layout (40 min)
 
 The goal of this task is for you to learn how to interpret a layout and re-create the transistor schematic of a 12-transistors standard cell.
 
@@ -298,9 +299,11 @@ A correct placement produces **no violations**.  You will see one result under `
 
 > If you do get real violations they will almost always sit on a cell boundary, and the cause is two cells that are not exactly abutted, or whose power rails are not aligned.  Go back to Step 6 and re-align them.
 
-### Task 4 - Hand Route the standard cells (60 min)
+### Task 4 - Hand Route the standard cells (30 min)
 
 The next task is to connect all these cells according to the following wiring diagram.
+
+>Hand routing the whole circuit to a clean DRC takes far longer than one lab session.  We recommend that you route **one** connection in Step 2, run DRC, and then move on to Task 5.  Steps 3 to 6 describe the rest of the routing for anyone who wants to complete it in their own time.
 
 <p align="center"> <img src="diagrams/lfsr_wires.png" width="1000" height="331"> </p><BR>
 
@@ -334,7 +337,7 @@ You have now successfully connected a vertical M2 wire to a horizontal M1 wire.
 <p align="center"> <img src="diagrams/M1M2via.png" width="800" height="241"> </p><BR>
 
 
-**_Step 2: The neighbourhood wires_**
+**_Step 2: Route one neighbourhood wire_**
 
 Both pins are on M1, on cells that abut, so these are the shortest connections in the design.  There are five:
 
@@ -346,6 +349,8 @@ Both pins are on M1, on cells that abut, so these are the shortest connections i
 | `sreg_reg_3_.Q` | `sreg_reg_4_.D` |
 | `sreg_reg_4_.Q` | `ctmi_10.A2` |
 
+Pick one to route.  We suggest `sreg_reg_1_.Q` to `sreg_reg_2_.D`.
+
 The cells are already full of their own M1, so you will not always find a clear M1 path between the two pins.  Where the direct route is blocked, we bridge over it on M2:
 
 * Draw a short M1 stub off each pin, up to the blockage on either side.
@@ -354,9 +359,9 @@ The cells are already full of their own M1, so you will not always find a clear 
 * Keep the M2 at least the minimum M2 width and spacing.
 
 
-Run **_Calibre -> Run nmDRC_** when all five are done, and fix anything it reports before moving on.
+Run **_Calibre -> Run nmDRC_**.  It should be clean apart from the `DRM.R.1` reminder.  That is all Task 5 needs, so continue there, or carry on to Step 3 to complete the routing.
 
-**_Step 3: Routing the clock_**
+**_Step 3 (optional): Routing the clock_**
 
 `clk` has to reach the `CP` pin of all four flip-flops.  Those pins are inside the row, so this needs both metal layers.
 
@@ -368,7 +373,7 @@ Run **_Calibre -> Run nmDRC_** when all five are done, and fix anything it repor
 * Run DRC.
 
 
-**_Step 4: Routing the reset_**
+**_Step 4 (optional): Routing the reset_**
 
 `phfnn_1` runs from `phfnr_buf_5.ZN` to `sreg_reg_1_.SDN` and to `CDN` on the other three flip-flops. Do this in the channel **above** the row.
 
@@ -378,7 +383,7 @@ Run **_Calibre -> Run nmDRC_** when all five are done, and fix anything it repor
 * `rst` itself only has to reach `phfnr_buf_5.I`, which is a short wire.
 * Run DRC.
 
-**_Step 5: The internal signal wires_**
+**_Step 5 (optional): The internal signal wires_**
 
 We have two connections left, and both have to travel through a routing channel:
 
@@ -387,7 +392,7 @@ We have two connections left, and both have to travel through a routing channel:
 
 Run DRC after each of them.
 
-**_Step 6: Connect the pins_**
+**_Step 6 (optional): Connect the pins_**
 
 The block has **eight** ports.  Six of them - `clk`, `rst` and `data_out<3:0>` - already exist on the layout as M1 pins with labels, created when you generated the layout from the schematic in Task 3 Step 4.  The other two, `VDD` and `VSS`, do not exist yet and you have to make them.
 
@@ -403,17 +408,76 @@ Then create the two power ports:
 
 Run a final **_Calibre -> Run nmDRC_**.  It should be clean apart from the `DRM.R.1` reminder.
 
-### Task 5 - Perform Layout vs Schematic (LVS) check (15 min)
+### Task 5 - Fixing a broken layout (60 min)
 
-The final task is to confirm that the layout you have created implements the circuit specified by the schematic.  LVS extracts a netlist from your layout and compares it against the schematic, device by device and net by net.
+The purpose of this task is to learn how to read Calibre's DRC and LVS reports and use them to find and fix mistakes in a layout.  You are given a completed layout of LFSR4 that contains a number of deliberate errors, together with the netlist of the circuit it is supposed to implement.  Your job is to bring the layout to a clean DRC and a `CORRECT` LVS.
 
-**_Step 1: Match the bus naming convention_**
+**_Step 1: Import the broken layout and its netlist_**
 
-Calibre writes bus bits with square brackets, `data_out[0]`.  Custom Compiler's CDL netlister defaults to angle brackets, `data_out<0>`.  If you leave this alone, the two sides of the comparison will spell the same four ports differently, and LVS will report them as missing.
+The two files are in the `broken_netlist` folder of this lab's repository.
 
-In the **schematic** window, use **_Design -> Export Netlist ..._**, go to the **_Netlister Options_** tab, and set **_Bus Brackets_** to **`[]`**.  Click **_Apply_**, then **_Ok_**.
+First create a library to hold the broken design.  In the Library Manager, use **_File -> New -> Library ..._** and fill in the dialogue box exactly as you did in Task 3:
 
-**_Step 2: Set up and run LVS_**
+*   **_Name_**: `task_5`
+*   **_Directory_**: `./`
+*   **_Type_**: `OpenAccess (FileSys)`
+*   Under **_Technology_**, select the **_Tech Library_** radio button and pick **_tsmcN65_** from its dropdown.
+
+<p align="center"> <img src="diagrams/task5_lib.png" width="470" height="593"> </p><BR>
+
+Next import the netlist as a schematic.  In the Custom Compiler home window, use **_File -> Import -> Schematic from Netlist ..._** and fill in four fields, leaving every other setting at its default:
+
+1. **_Language_**: `CDL`.
+2. **_Netlist Files_**: browse to `broken_netlist/schematic.sp`.
+3. **_Top Cell Name_**: `lfsr4`.
+4. **_Library_** (under Output): `task_5`.
+
+<p align="center"> <img src="diagrams/import_schematic.png" width="534" height="642"> </p><BR>
+
+Click **OK**, then open **_task_5 -> lfsr4 -> schematic_** from the Library Manager and check that the circuit is the LFSR4.
+
+Finally import the layout.  Use **_File -> Import -> Stream_** and fill in the **_Main_** tab, leaving the other tabs at their defaults:
+
+1. **_Stream File_**: `broken_netlist/netlist.gds`.
+2. **_Top Cell_**: `lfsr4`.
+3. **_Library_** (under Output): `task_5`, with **_View_** left as `layout`.
+4. Under **_Technology_**, select **_Attach_** and pick **_tsmcN65_**.
+
+<p align="center"> <img src="diagrams/import_netlist.png" width="633" height="699"> </p><BR>
+
+Click **OK**.  The library `task_5` now holds a schematic and a layout of `lfsr4`, just as `Lab_2` did at the end of Task 4.
+
+**_Step 2: Run DRC_**
+
+Open **_task_5 -> lfsr4 -> layout_** and press **_SHIFT-f_** to show the mask layers inside each cell.  The layout is the LFSR4 row you placed in Task 3, fully routed, with its pins in place.
+
+<p align="center"> <img src="diagrams/broken_netlist.png" width="1000" height="162"> </p><BR>
+
+Run a design rule check on it, exactly as in Task 3 Step 7.  Tick **_Tools -> Calibre_** if the **_Calibre_** menu is not already there, then:
+
+1. Use **_Calibre -> Run nmDRC ..._**.
+2. On the **_Rules_** page, set **_Rules File_** to:
+
+```
+/eda/cadence_tools/kits/tsmc/65n_LP/Calibre/drc/calibre_density_off.drc
+```
+
+3. On the **_Inputs_** page, check that **_OA Library Name_** is `task_5`, **_Top Cell_** is `lfsr4` and **_OA View Name_** is `layout`.
+4. Click **_Run DRC_**.
+
+**_Step 3: Fix the DRC violations_**
+
+When the run finishes the **_Calibre RVE_** window opens.  Alongside the `DRM.R.1` reminder, you will find three other checks with results.  Click a check in the left hand pane and the description box at the bottom explains the rule it tests.  The numbers to the right of it are the individual violations of that rule.  Double click one and switch to the layout window: the offending shapes are highlighted, and you may need to zoom out to find them.
+
+Now fix them.  Everything you need is in Task 4: moving a shape, changing its dimensions with **_"q"_**, adding or deleting a via with **_"o"_**.  Think about what each rule is protecting before you move anything.
+
+>Fix one violation at a time and re-run DRC after each.  A fix that moves a wire can easily create a new violation somewhere else.
+
+Run a final **_Calibre -> Run nmDRC_**.  It should be clean apart from the `DRM.R.1` reminder.
+
+**_Step 4: Perform Layout vs Schematic (LVS) check_**
+
+A clean DRC means the layout can be manufactured.  It does not mean the layout is the right circuit.  LVS extracts a netlist from the layout and compares it against the reference netlist, device by device and net by net.
 
 1. In the layout window, use **_Calibre -> Run nmLVS ..._**.
 2. On the **_Rules_** page, set **_Rules File_** to:
@@ -422,7 +486,9 @@ In the **schematic** window, use **_Design -> Export Netlist ..._**, go to the *
 /eda/cadence_tools/kits/tsmc/65n_LP/Calibre/lvs/calibre.lvs
 ```
 
-3. On the **_Inputs_** page, check that **_Layout Path_** reads Library `Lab_2`, Top Cell `lfsr4`, View `layout`, and that under **_Source Path_** the **_Export from source viewer_** box is ticked with Library `Lab_2`, Top Cell `lfsr4`, View `schematic`. 
+3. On the **_Inputs_** page, check that **_Layout Path_** reads Library `task_5`, Top Cell `lfsr4`, View `layout`.  Then on the **_Netlist_** tab, **untick** **_Export from source viewer_**, enter `broken_netlist/schematic.sp` under **_Files_**, leave **_Format_** as `SPICE`, and check that **_Top Cell_** is `lfsr4`.
+
+
 4. On the **_OA/LEFDEF_** page, under **_Read Options_**, tick **_Read Net Names as Text_** and **_Read Pin Names as Text_**.  Then open **_Mapping Files_**, tick **_Use Layer Map Files_**, and enter:
 
 ```
@@ -438,12 +504,23 @@ In the **schematic** window, use **_Design -> Export Netlist ..._**, go to the *
 
 7. Click **_Run LVS_**.
 
-<p align="center"> <img src="diagrams/LVS_setup.png" width="800" height="625"> </p><BR>
 
+The report will say `INCORRECT`.  That is expected.  The layout contains two errors that DRC cannot see, because a layout can obey every design rule and still be the wrong circuit.
 
-**_Step 3: Read the result_**
+**_Step 5: Fix the LVS discrepancies_**
 
-The report opens when the run finishes. Look for the banner near the top:
+In the **_Calibre RVE_** window, expand **_Comparison Results_** and then **_Discrepancies_**.  Click a discrepancy and the pane below describes it.
+
+The first discrepancy is a missing port.  The source has a `VSS` port and the layout does not.
+
+* The row has two horizontal M1 rails carrying VDD and VSS.  They exist because the cells abut.  The `VDD` and `VSS` labels you can see belong to the **standard cells' own layouts**, inside `tcbn65lpbwp7t_9lm`, not to `lfsr4`.  The `VSS` rail has no label of its own at the top level.
+* Make **_M1 pin_** the active layer, use **_Create -> Text_**, and place a `VSS` label on the VSS rail.
+
+The second discrepancy is a net that does not match its counterpart in the source.  Double click the net names in the description pane and the layout window highlights them.  Compare what is highlighted with the wiring diagram in Task 4.  How do you think this can be fixed?
+
+>After every change, run DRC before you run LVS again, so that the fix has not introduced a design rule violation of its own.
+
+Run **_Calibre -> Run nmLVS_** again and look for the banner near the top of the report:
 
 ```
 
@@ -455,7 +532,6 @@ The report opens when the run finishes. Look for the banner near the top:
 
 ```
 
-`CORRECT` means the layout implements the schematic exactly.  If you get `INCORRECT`, examine the comparison results in the RVE window that opens after running LVS.
+`CORRECT` means the layout implements the netlist exactly.  If you still get `INCORRECT`, go back to the discrepancies in the RVE window and work through them one at a time.
 
-You have now successfully completed the full custom layout flow for LFSR4.  Since the layout matches the schematic, which came from the Lab 1 netlist you verified by simulation, we are confident that this LFSR4 layout works as intended.
-
+You have now completed the full custom layout flow for LFSR4 and repaired a layout using the two checks every chip must pass before tapeout.  Since the layout matches the netlist, which came from the Lab 1 netlist you verified by simulation, we are confident that this LFSR4 layout works as intended.
